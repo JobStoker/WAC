@@ -41,7 +41,7 @@ public class CalculatorServlet extends HttpServlet {
         out.println("  <title>Dynamic Example</title>");
         out.println("  <body>");
         out.println("    <h2>Dynamic webapplication example</h2>");
-        out.println("    <h2>Waarde: " + waarde + "!</h2>");
+        out.println("    <h2>Antwoord: " + waarde + "</h2>");
         out.println("  </body>");
         out.println("</html>");
     }

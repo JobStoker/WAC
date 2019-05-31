@@ -17,9 +17,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
 
 import nl.hu.v1wac.firstapp.model.Country;
 import nl.hu.v1wac.firstapp.webservices.WorldService;
+import nl.hu.v1wac.firstapp.persistence.CountryDao;
+import nl.hu.v1wac.firstapp.persistence.CountryPostgresDaoImpl;
+import javax.annotation.security.RolesAllowed;
+
 
 @Path("/countries")
 public class ServiceProvider {
@@ -29,7 +34,7 @@ public class ServiceProvider {
 		return worldService;
 	}
 	
-	@GET
+	@GET	
 	@Produces("application/json")
 	public String getCounties() {
 		JsonArrayBuilder jab = Json.createArrayBuilder();
@@ -114,4 +119,57 @@ public class ServiceProvider {
 		JsonArray array = jab.build();	
 		return array.toString();
 	}
+	
+	@DELETE
+	@RolesAllowed("user")
+	@Path("{code}")
+	public Response delete(@PathParam("code") String code) {
+		CountryPostgresDaoImpl db = new CountryPostgresDaoImpl();
+		Country c = new Country();
+		c.setCode(code);
+		db.delete(c);
+		return Response.ok().build();
+	}
+	
+	@PUT
+	@RolesAllowed("user")
+	@Path("{code}")
+	public Response update(@PathParam("code") String code, @FormParam("land") String name, @FormParam("hoofdstad") String capital, @FormParam("populatie") int population, @FormParam("surface") int surface) {
+		System.out.println("------------------");
+		System.out.println(name);
+		CountryPostgresDaoImpl db = new CountryPostgresDaoImpl();
+		Country country = new Country(); 
+		country.setCode(code);
+		country.setName(name);
+		country.setCapital(capital);
+		country.setSurface(surface);
+		country.setPopulation(population);
+
+		boolean result = db.update(country);
+		if (!result) {
+			return Response.status(404).build();
+		}
+		
+		return Response.ok().build();
+	}
+	
+	@POST
+	@RolesAllowed("user")
+	public Response save(@FormParam("code") String code, @FormParam("land") String name, @FormParam("hoofdstad") String capital, @FormParam("populatie") int population, @FormParam("surface") int surface) {
+		CountryDao db = new CountryPostgresDaoImpl();
+		Country country = new Country();
+		country.setCode(code);
+		country.setName(name);
+		country.setCapital(capital);
+		country.setSurface(surface);
+		country.setPopulation(population);
+		boolean resp = db.save(country);
+		
+		if (!resp) {
+			return Response.status(402).build();
+		}
+		
+		return Response.ok().build();
+	}
+
 }
