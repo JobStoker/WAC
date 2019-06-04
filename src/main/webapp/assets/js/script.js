@@ -189,7 +189,7 @@ function login(){
 	})
 	.then((myJson) => {
 		window.sessionStorage.setItem("sessionToken", myJson.JWT);
-		window.location.href = "http://localhost:8080/firstapp/weather.html";
+		window.location.href = "/weather.html";
 	});
 } 
 
