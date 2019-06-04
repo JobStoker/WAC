@@ -128,7 +128,7 @@ function initResult() {
 function deleteCountry(code){
 	console.log(code);
 	
-	fetch('restservices/countries/' + code, {method: 'DELETE', headers : {	'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken") }})
+	fetch('/restservices/countries/' + code, {method: 'DELETE', headers : {	'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken") }})
 		.then((response) => {
 			if (response.status == 200) { 
 				console.log("verwijderd");
@@ -141,7 +141,7 @@ function updateCountry(){
 	var formData = new FormData(document.querySelector("#wijzigen"));		
 	var encData = new URLSearchParams(formData.entries());
 	
-	fetch("firstapp/restservices/countries/" + code, {method: 'PUT', body: encData, headers : {	'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken") }})
+	fetch("/restservices/countries/" + code, {method: 'PUT', body: encData, headers : {	'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken") }})
 	.then((myJson) => {
 		console.log(myJson);
 	});
@@ -153,7 +153,7 @@ function addCountry(){
 	var formData = new FormData(document.querySelector("#toevoegen"));		
 	var encData = new URLSearchParams(formData.entries());
 	
-	fetch('firstapp/restservices/countries', {method: 'POST', body: encData, headers : {	'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken") }})
+	fetch('/restservices/countries', {method: 'POST', body: encData, headers : {	'Authorization': 'Bearer ' + window.sessionStorage.getItem("sessionToken") }})
 	.then((response) => {
 		if (response.status == 402) { 
 			console.log("Error, fout");
@@ -179,7 +179,7 @@ function login(){
 	var encData = new URLSearchParams(formData.entries());
 	document.querySelector("#error").innerHTML = "";
 	
-	fetch('restservices/authentication', {method: 'POST', body: encData, fetchoptions})
+	fetch('/restservices/authentication', {method: 'POST', body: encData, fetchoptions})
 	.then((response) => { 
 		if (response.ok) {
 			return response.json();
